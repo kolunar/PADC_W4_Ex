@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_linked_in"
+            android:icon="@drawable/ic_menu_linkedin"
+            android:title="PADC - LinkedIn" />
+        <item
+            android:id="@+id/nav_job_search"
+            android:icon="@drawable/ic_menu_jobsearch"
+            android:title="PADC - Job Search" />
+        <item
+            android:id="@+id/nav_pulse"
+            android:icon="@drawable/ic_menu_pulse"
+            android:title="PADC - Pulse" />
+        <item
+            android:id="@+id/nav_movie"
+            android:icon="@drawable/ic_menu_movie"
+            android:title="PADC - ရုပ္ရွင္" />
+        <item
+            android:id="@+id/nav_wunzinn"
+            android:icon="@drawable/ic_menu_wunzinn"
+            android:title="PADC - ဝန္ဇင္း" />
+    </group>
+
+</menu>
