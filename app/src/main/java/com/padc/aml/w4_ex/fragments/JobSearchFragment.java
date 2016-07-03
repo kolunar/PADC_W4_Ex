@@ -3,12 +3,23 @@ package com.padc.aml.w4_ex.fragments;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.padc.aml.w4_ex.R;
+import com.padc.aml.w4_ex.W4ExApp;
+import com.padc.aml.w4_ex.adapters.JobItemAdapter;
+import com.padc.aml.w4_ex.data.models.JobModel;
+import com.padc.aml.w4_ex.data.vos.JobVO;
+
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -19,14 +30,19 @@ import com.padc.aml.w4_ex.R;
  * create an instance of this fragment.
  */
 public class JobSearchFragment extends Fragment {
+
+    private JobItemAdapter mJobItemAdapter;
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private static final String ARG_INDEX = "index";
 
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private int mIndex;
 
     private OnFragmentInteractionListener mListener;
 
@@ -37,7 +53,7 @@ public class JobSearchFragment extends Fragment {
     public static JobSearchFragment newInstance(int index) {
         JobSearchFragment fragment = new JobSearchFragment();
         Bundle args = new Bundle();
-        args.putInt(ARG_PARAM1, index);
+        args.putInt(ARG_INDEX, index);
         fragment.setArguments(args);
         return fragment;
     }
@@ -63,9 +79,13 @@ public class JobSearchFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        mJobItemAdapter = new JobItemAdapter(JobModel.getInstance().getJobList(), mJobItemController);
+
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            mIndex = getArguments().getInt(ARG_INDEX);
+            //mParam1 = getArguments().getString(ARG_PARAM1);
+            //mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
 
@@ -73,7 +93,26 @@ public class JobSearchFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_job_search, container, false);
+        View view = inflater.inflate(R.layout.fragment_job_search, container, false);
+
+        RecyclerView rvEvent = (RecyclerView) view.findViewById(R.id.rv_events);
+        rvEvent.setAdapter(mJobItemAdapter);
+        rvEvent.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+
+        final SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
+                }, 3000);
+            }
+        });
+
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -83,19 +122,15 @@ public class JobSearchFragment extends Fragment {
         }
     }
 
-    private ControllerView controller;
-    public interface ControllerView {
-        void onFragmentChange();
-    }
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if(context instanceof ControllerView){
-            controller = (ControllerView) context;
+
+        if (context instanceof ControllerJobItem){
+            mJobItemController = (ControllerJobItem) context;
         }
         else{
-            throw new RuntimeException("Activity is not implementing required controller for ViewFragment");
+            throw new RuntimeException("Activity is not implementing required controller for JobSearchFragment");
         }
         /*
         if (context instanceof OnFragmentInteractionListener) {
@@ -126,5 +161,11 @@ public class JobSearchFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    private ControllerJobItem mJobItemController;
+    public interface ControllerJobItem {
+        void onTapEvent(JobVO job);
+        void onFragmentChange();
     }
 }

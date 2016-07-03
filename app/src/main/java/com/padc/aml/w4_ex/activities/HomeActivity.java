@@ -13,8 +13,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.padc.aml.w4_ex.R;
+import com.padc.aml.w4_ex.W4ExApp;
+import com.padc.aml.w4_ex.data.vos.JobVO;
+import com.padc.aml.w4_ex.data.vos.MovieVO;
 import com.padc.aml.w4_ex.fragments.JobSearchFragment;
 import com.padc.aml.w4_ex.fragments.LinkedInFragment;
 import com.padc.aml.w4_ex.fragments.MovieFragment;
@@ -23,9 +27,9 @@ import com.padc.aml.w4_ex.fragments.WunZinnFragment;
 
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
-        JobSearchFragment.ControllerView,
+        JobSearchFragment.ControllerJobItem,
         LinkedInFragment.ControllerView,
-        MovieFragment.ControllerView,
+        MovieFragment.ControllerMovieItem,
         PulseFragment.ControllerView,
         WunZinnFragment.ControllerView {
 
@@ -53,6 +57,10 @@ public class HomeActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        if (savedInstanceState == null) {
+            navigateToLinkedIn(0);
+        }
     }
 
     @Override
@@ -154,8 +162,26 @@ public class HomeActivity extends AppCompatActivity
         return true;
     }
 
+    /*
+    Activity - Fragment
+                    |
+                RecyclerView - Adapter
+                                    |
+                                ViewHolder
+    */
+
+    @Override
+    public void onTapEvent(JobVO job) {
+        Toast.makeText(W4ExApp.getContext(), "onTapEvent - JobVO", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onTapEvent(MovieVO movie) {
+        Toast.makeText(W4ExApp.getContext(), "onTapEvent - MovieVO", Toast.LENGTH_LONG).show();
+    }
+
     @Override
     public void onFragmentChange() {
-
+        Toast.makeText(W4ExApp.getContext(), "onFragmentChange", Toast.LENGTH_LONG).show();
     }
 }

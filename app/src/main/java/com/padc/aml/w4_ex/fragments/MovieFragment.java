@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.padc.aml.w4_ex.R;
+import com.padc.aml.w4_ex.data.vos.MovieVO;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -23,10 +24,12 @@ public class MovieFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private static final String ARG_INDEX = "index";
 
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private int mIndex;
 
     private OnFragmentInteractionListener mListener;
 
@@ -37,7 +40,7 @@ public class MovieFragment extends Fragment {
     public static MovieFragment newInstance(int index) {
         MovieFragment fragment = new MovieFragment();
         Bundle args = new Bundle();
-        args.putInt(ARG_PARAM1, index);
+        args.putInt(ARG_INDEX, index);
         fragment.setArguments(args);
         return fragment;
     }
@@ -64,8 +67,9 @@ public class MovieFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            mIndex = getArguments().getInt(ARG_INDEX);
+            //mParam1 = getArguments().getString(ARG_PARAM1);
+            //mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
 
@@ -83,16 +87,11 @@ public class MovieFragment extends Fragment {
         }
     }
 
-    private ControllerView controller;
-    public interface ControllerView {
-        void onFragmentChange();
-    }
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if(context instanceof ControllerView){
-            controller = (ControllerView) context;
+        if(context instanceof ControllerMovieItem){
+            mMovieItemController = (ControllerMovieItem) context;
         }
         else{
             throw new RuntimeException("Activity is not implementing required controller for ViewFragment");
@@ -118,5 +117,11 @@ public class MovieFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    private ControllerMovieItem mMovieItemController;
+    public interface ControllerMovieItem {
+        void onTapEvent(MovieVO movie);
+        void onFragmentChange();
     }
 }

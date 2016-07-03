@@ -23,10 +23,12 @@ public class PulseFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private static final String ARG_INDEX = "index";
 
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private int mIndex;
 
     private OnFragmentInteractionListener mListener;
 
@@ -37,7 +39,7 @@ public class PulseFragment extends Fragment {
     public static PulseFragment newInstance(int index) {
         PulseFragment fragment = new PulseFragment();
         Bundle args = new Bundle();
-        args.putInt(ARG_PARAM1, index);
+        args.putInt(ARG_INDEX, index);
         fragment.setArguments(args);
         return fragment;
     }
@@ -64,8 +66,9 @@ public class PulseFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            mIndex = getArguments().getInt(ARG_INDEX);
+            //mParam1 = getArguments().getString(ARG_PARAM1);
+            //mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
 
